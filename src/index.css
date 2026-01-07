@@ -94,6 +94,14 @@
     letter-spacing: 0.02em;
   }
 
+  /* Hero brand text - smaller for single line */
+  .text-hero-brand-sm {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 12vw, 10rem);
+    line-height: 1;
+    letter-spacing: 0.05em;
+  }
+
   /* Section title */
   .text-section-title {
     font-family: 'Bebas Neue', sans-serif;

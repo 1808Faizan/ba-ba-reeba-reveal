@@ -1,22 +1,36 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import heroBg from '@/assets/hero-bg.jpg';
 
 const HeroSection = () => {
-  const brandName = "BA BA REEBA";
+  const brandName = "BABAREEBA";
   const letters = brandName.split('');
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"]
+  });
+
+  // Parallax effect for background
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
-      {/* Background image with overlay */}
-      <div className="absolute inset-0">
+    <section ref={sectionRef} id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
+      {/* Parallax Background image with overlay */}
+      <motion.div 
+        className="absolute inset-0"
+        style={{ y: bgY, scale: bgScale }}
+      >
         <img 
           src={heroBg} 
           alt="" 
           className="w-full h-full object-cover opacity-30"
         />
-        <div className="absolute inset-0 bg-gradient-dark-bottom" />
-        <div className="absolute inset-0 bg-background/60" />
-      </div>
+      </motion.div>
+      <div className="absolute inset-0 bg-gradient-dark-bottom" />
+      <div className="absolute inset-0 bg-background/60" />
 
       {/* Animated glow orb */}
       <motion.div
@@ -36,9 +50,9 @@ const HeroSection = () => {
       />
 
       {/* Hero content */}
-      <div className="relative z-10 text-center px-4 w-full">
-        {/* Animated brand name */}
-        <h1 className="text-hero-brand text-foreground glow-text-subtle mb-6 flex justify-center flex-wrap">
+      <div className="relative z-10 text-center px-4 w-full mt-20">
+        {/* Animated brand name - smaller size, single line */}
+        <h1 className="text-hero-brand-sm text-foreground glow-text-subtle mb-6 flex justify-center whitespace-nowrap">
           {letters.map((letter, index) => (
             <motion.span
               key={index}
@@ -51,11 +65,11 @@ const HeroSection = () => {
                 ease: [0.25, 0.1, 0.25, 1]
               }}
               style={{ 
-                marginRight: letter === ' ' ? '0.25em' : '-0.01em',
+                marginRight: '-0.01em',
                 display: 'inline-block',
               }}
             >
-              {letter === ' ' ? '\u00A0' : letter}
+              {letter}
             </motion.span>
           ))}
         </h1>

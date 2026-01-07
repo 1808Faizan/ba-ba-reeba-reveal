@@ -1,7 +1,13 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
-  const navItems = ['Home', 'About', 'Menu', 'Lounge'];
+  const navItems = [
+    { name: 'Home', href: '#home', isRoute: false },
+    { name: 'About', href: '#about', isRoute: false },
+    { name: 'Menu', href: '/menu', isRoute: true },
+    { name: 'Lounge', href: '#lounge', isRoute: false },
+  ];
 
   return (
     <motion.header 
@@ -12,23 +18,32 @@ const Header = () => {
     >
       <nav className="flex items-center justify-between max-w-7xl mx-auto">
         <span className="font-display text-lg tracking-widest text-foreground">
-          BA BA REEBA
+          BABAREEBA
         </span>
         
         <ul className="hidden md:flex items-center gap-10">
           {navItems.map((item, index) => (
             <motion.li
-              key={item}
+              key={item.name}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1.7 + index * 0.1 }}
             >
-              <a
-                href={`#${item.toLowerCase()}`}
-                className="text-sm font-medium tracking-wider text-muted-foreground hover:text-foreground transition-colors duration-300 uppercase"
-              >
-                {item}
-              </a>
+              {item.isRoute ? (
+                <Link
+                  to={item.href}
+                  className="text-sm font-medium tracking-wider text-muted-foreground hover:text-foreground transition-colors duration-300 uppercase"
+                >
+                  {item.name}
+                </Link>
+              ) : (
+                <a
+                  href={item.href}
+                  className="text-sm font-medium tracking-wider text-muted-foreground hover:text-foreground transition-colors duration-300 uppercase"
+                >
+                  {item.name}
+                </a>
+              )}
             </motion.li>
           ))}
         </ul>
