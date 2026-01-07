@@ -31,13 +31,13 @@ const FeaturesSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className="relative py-32 overflow-hidden noise-overlay"
+      className="relative py-20 md:py-28 overflow-hidden noise-overlay"
       onMouseMove={handleMouseMove}
     >
-      <div className="max-w-5xl mx-auto px-6 md:px-12">
+      <div className="max-w-4xl mx-auto px-6 md:px-12">
         <motion.h2 
           style={{ opacity }}
-          className="text-section-title text-foreground text-center mb-20"
+          className="text-section-title text-foreground text-center mb-12"
         >
           LOUNGE
         </motion.h2>
@@ -46,28 +46,28 @@ const FeaturesSection = () => {
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
               className="relative"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              <div className="divider-line" />
-              <div className="py-8 md:py-12 cursor-pointer group">
-                <h3 className="text-feature text-center text-foreground/80 group-hover:text-foreground transition-colors duration-300">
+              <div className="h-px bg-gradient-to-r from-transparent via-muted-foreground/30 to-transparent" />
+              <div className="py-5 md:py-6 cursor-pointer group">
+                <h3 className="text-lg md:text-xl lg:text-2xl font-display tracking-wider text-center text-foreground/70 group-hover:text-foreground transition-colors duration-300">
                   {feature.title}
                 </h3>
               </div>
             </motion.div>
           ))}
-          <div className="divider-line" />
+          <div className="h-px bg-gradient-to-r from-transparent via-muted-foreground/30 to-transparent" />
         </div>
 
         <motion.div 
           style={{ opacity }}
-          className="flex justify-center mt-16"
+          className="flex justify-center mt-10"
         >
           <button className="btn-outline-accent">
             Need a hand?
@@ -82,10 +82,10 @@ const FeaturesSection = () => {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.2 }}
-          className="fixed pointer-events-none z-50 w-64 h-80 overflow-hidden rounded-sm"
+          className="fixed pointer-events-none z-50 w-52 h-64 overflow-hidden rounded-sm shadow-2xl"
           style={{
             left: mousePos.x + 20,
-            top: mousePos.y - 160,
+            top: mousePos.y - 130,
           }}
         >
           <motion.img
