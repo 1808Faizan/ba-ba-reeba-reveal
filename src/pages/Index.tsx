@@ -1,10 +1,12 @@
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
-import FeaturesSection from '@/components/FeaturesSection';
 import DrinksSection from '@/components/DrinksSection';
 import ReviewsSection from '@/components/ReviewsSection';
 import FooterSection from '@/components/FooterSection';
+import ScrollingText from '@/components/ScrollingText';
+import WorksSection from '@/components/WorksSection';
+import CircleScrollAnimation from '@/components/ircleScrollAnimation';
 
 const Index = () => {
   return (
@@ -12,10 +14,13 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
+        <ScrollingText />
         <AboutSection />
-        <FeaturesSection />
+        <CircleScrollAnimation />
+        <WorksSection />
         <DrinksSection />
         <ReviewsSection />
+        
         <FooterSection />
       </main>
     </div>

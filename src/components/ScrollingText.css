@@ -1,0 +1,49 @@
+.scrolling-text-snap {
+  height: 30vh;
+  display: flex;
+  align-items: center;
+  background: #0b0b0b;
+}
+
+/* Wrapper */
+.scrolling-text-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Track */
+.scrolling-text-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 18s linear infinite;
+}
+
+/* Text */
+.scrolling-text {
+  font-size: clamp(3rem, 7vw, 7rem);
+  font-weight: 700;
+  white-space: nowrap;
+  padding-right: 3rem;
+}
+
+/* Stroke text */
+.stroked-text {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #ffffff;
+}
+
+/* Font */
+.brand-font {
+  font-family: "Poppins", sans-serif;
+  letter-spacing: 0.15em;
+}
+
+/* Animation */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
