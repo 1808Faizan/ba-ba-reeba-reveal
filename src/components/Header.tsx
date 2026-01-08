@@ -11,12 +11,11 @@ const Header = () => {
   const [hoverLogo, setHoverLogo] = useState(false);
 
   const navItems = [
-    { name: "Home", href: "#home", isRoute: false },
-    { name: "Menu", href: "#about", isRoute: false },
-    { name: "Reservation", href: "/menu", isRoute: true },
-    { name: "Gallery", href: "#lounge", isRoute: false },
-    { name: "Contact", href: "#lounge", isRoute: false },
-
+    { name: "Home", href: "/", isRoute: true },
+    { name: "Menu", href: "/menu", isRoute: true },
+    { name: "Reservation", href: "/reservation", isRoute: true },
+    { name: "Gallery", href: "/gallery", isRoute: true },
+    { name: "Contact", href: "/contact", isRoute: true },
   ];
 
   const handleClose = () => setOpen(false);
