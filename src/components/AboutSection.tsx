@@ -20,12 +20,15 @@ const AboutSection = () => {
   const opacity = useTransform(scrollYProgress, [0.1, 0.25], [0, 1]);
   const contentOpacity = useTransform(scrollYProgress, [0.15, 0.35], [0, 1]);
 
-  // Soft floating loop
-  const floatUp = {
-    animate: {
-      y: [-6, 6, -6],
-      transition: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-    },
+  // Soft floating loop - using proper framer-motion types
+  const floatAnimation = {
+    y: [-6, 6, -6],
+  };
+  
+  const floatTransition = {
+    duration: 6,
+    repeat: Infinity,
+    ease: "easeInOut" as const,
   };
 
   return (
@@ -42,14 +45,18 @@ const AboutSection = () => {
             style={{ x: leftImageX, opacity }}
             className="relative hidden lg:flex flex-col items-center justify-center"
           >
-            <motion.div {...floatUp} className="relative">
+            <motion.div 
+              animate={floatAnimation}
+              transition={floatTransition}
+              className="relative"
+            >
               <div className="w-56 h-72 rotate-[6deg] overflow-hidden border border-white/20 shadow-xl">
                 <img src={aboutLeft} className="w-full h-full object-cover" />
               </div>
 
               <motion.div
                 animate={{ y: [6, -6, 6] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" as const }}
                 className="absolute -bottom-12 -right-8 w-44 h-56 -rotate-[8deg] overflow-hidden border border-white/20 shadow-xl"
               >
                 <img src={aboutRight} className="w-full h-full object-cover" />
@@ -111,14 +118,18 @@ const AboutSection = () => {
             style={{ x: rightImageX, opacity }}
             className="relative hidden lg:flex flex-col items-center justify-center"
           >
-            <motion.div {...floatUp} className="relative">
+            <motion.div 
+              animate={floatAnimation}
+              transition={floatTransition}
+              className="relative"
+            >
               <div className="w-56 h-72 -rotate-[6deg] overflow-hidden border border-white/20 shadow-xl">
                 <img src={aboutRight} className="w-full h-full object-cover" />
               </div>
 
               <motion.div
                 animate={{ y: [-6, 6, -6] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" as const }}
                 className="absolute -bottom-12 -left-8 w-44 h-56 rotate-[8deg] overflow-hidden border border-white/20 shadow-xl"
               >
                 <img src={aboutLeft} className="w-full h-full object-cover" />
