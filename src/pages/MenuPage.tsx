@@ -124,15 +124,17 @@ const MenuPage = () => {
 
       {/* Menu Card Container */}
       <div 
-        className="relative w-[85vw] md:w-[60vw] lg:w-[50vw] max-w-2xl aspect-[3/4] cursor-pointer perspective-1000"
+        className="relative flex items-center justify-center w-full h-[75vh] md:h-[85vh] cursor-pointer px-4"
         style={{ perspective: "1500px" }}
         onClick={nextPage}
       >
         {/* Card Shadow */}
-        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[80%] h-12 bg-black/50 rounded-[50%] blur-2xl" />
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[60%] h-8 bg-black/50 rounded-[50%] blur-2xl" />
 
         {/* Card Glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-amber-500/20 rounded-2xl blur-xl opacity-50" />
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-[80%] max-w-3xl h-[80%] bg-gradient-to-br from-primary/20 via-transparent to-amber-500/20 rounded-2xl blur-xl opacity-50" />
+        </div>
 
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
@@ -147,32 +149,18 @@ const MenuPage = () => {
               opacity: { duration: 0.4 },
               scale: { duration: 0.4 },
             }}
-            className="absolute inset-0 w-full h-full"
+            className="relative max-w-full max-h-full"
             style={{ transformStyle: "preserve-3d" }}
           >
             {/* Card Frame */}
-            <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-              {/* Image */}
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+              {/* Image - Full display with contain */}
               <img
                 src={menuPages[currentPage].src}
                 alt={menuPages[currentPage].label}
-                className="w-full h-full object-cover"
+                className="max-w-[90vw] max-h-[70vh] md:max-h-[80vh] w-auto h-auto object-contain"
               />
               
-              {/* Gradient Overlays */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-              
-              {/* Page Label */}
-              <motion.div 
-                className="absolute bottom-6 left-6 right-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <p className="text-primary text-sm tracking-widest mb-1">PAGE {currentPage + 1}</p>
-                <h2 className="font-display text-3xl md:text-4xl text-white">{menuPages[currentPage].label}</h2>
-              </motion.div>
-
               {/* Corner Accents */}
               <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/50" />
               <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/50" />
