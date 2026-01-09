@@ -46,8 +46,8 @@ const FooterSection = () => {
   </div>
 
   {/* Text */}
-  <h2 className="text-hero-brand text-foreground glow-text-subtle leading-none">
-    BA BA REEBA
+  <h2 className="font-brand-serif text-foreground glow-text-subtle leading-none text-[8vw] md:text-[6vw] tracking-[0.15em]">
+    BABAREEBA
   </h2>
 </motion.div>
 
