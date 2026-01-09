@@ -5,15 +5,17 @@ import { Menu, X } from "lucide-react";
 
 import logo from "@/assets/logo.png";
 import logo2 from "@/assets/logo-2.png";
+import ReservationModal from "./ReservationModal";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [hoverLogo, setHoverLogo] = useState(false);
+  const [reservationOpen, setReservationOpen] = useState(false);
 
   const navItems = [
     { name: "Home", href: "/", isRoute: true },
     { name: "Menu", href: "/menu", isRoute: true },
-    { name: "Reservation", href: "/reservation", isRoute: true },
+    { name: "Reservation", href: "#", isRoute: false, isReservation: true },
     { name: "Gallery", href: "/gallery", isRoute: true },
     { name: "Contact", href: "/contact", isRoute: true },
   ];
@@ -71,7 +73,14 @@ const Header = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1.7 + index * 0.1 }}
             >
-              {item.isRoute ? (
+              {item.isReservation ? (
+                <button
+                  onClick={() => setReservationOpen(true)}
+                  className="text-sm font-medium tracking-wider text-muted-foreground hover:text-foreground transition-colors duration-300 uppercase"
+                >
+                  {item.name}
+                </button>
+              ) : item.isRoute ? (
                 <Link
                   to={item.href}
                   className="text-sm font-medium tracking-wider text-muted-foreground hover:text-foreground transition-colors duration-300 uppercase"
@@ -90,14 +99,25 @@ const Header = () => {
           ))}
         </ul>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setOpen(true)}
-          className="md:hidden text-foreground"
-        >
-          <Menu size={26} />
-        </button>
+        {/* Mobile: Reservation Button + Hamburger */}
+        <div className="flex items-center gap-4 md:hidden">
+          <button
+            onClick={() => setReservationOpen(true)}
+            className="text-xs font-medium tracking-wider text-foreground uppercase border border-foreground/30 px-3 py-1.5 hover:bg-foreground/10 transition-colors"
+          >
+            Reserve
+          </button>
+          <button
+            onClick={() => setOpen(true)}
+            className="text-foreground"
+          >
+            <Menu size={26} />
+          </button>
+        </div>
       </nav>
+
+      {/* Reservation Modal */}
+      <ReservationModal isOpen={reservationOpen} onClose={() => setReservationOpen(false)} />
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
@@ -129,7 +149,17 @@ const Header = () => {
             >
               {navItems.map((item) => (
                 <li key={item.name}>
-                  {item.isRoute ? (
+                  {item.isReservation ? (
+                    <button
+                      onClick={() => {
+                        handleClose();
+                        setReservationOpen(true);
+                      }}
+                      className="text-2xl tracking-widest font-medium text-muted-foreground hover:text-foreground transition-colors uppercase"
+                    >
+                      {item.name}
+                    </button>
+                  ) : item.isRoute ? (
                     <Link
                       to={item.href}
                       onClick={handleClose}

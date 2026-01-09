@@ -48,7 +48,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-black/40" />
 
       {/* TITLE */}
-      <h1 className="relative z-20 text-white font-black leading-none tracking-tight whitespace-nowrap text-[16vw] md:text-[15vw]">
+      <h1 className="relative z-20 text-white font-brand-serif leading-none whitespace-nowrap text-[12vw] md:text-[10vw] tracking-[0.15em]">
         {letters.map((letter, index) => (
           <motion.span
             key={index}
