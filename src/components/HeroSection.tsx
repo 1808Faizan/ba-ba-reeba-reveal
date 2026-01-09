@@ -48,7 +48,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-black/40" />
 
       {/* TITLE */}
-      <h1 className="relative z-20 text-white font-black leading-none tracking-tight whitespace-nowrap text-[18vw] md:text-[15vw]">
+      <h1 className="relative z-20 text-white font-black leading-none tracking-tight whitespace-nowrap text-[16vw] md:text-[15vw]">
         {letters.map((letter, index) => (
           <motion.span
             key={index}
@@ -71,7 +71,9 @@ const HeroSection = () => {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, delay: 1.5 }}
-        className="absolute text-center text-white/90 font-light text-sm md:text-xl bottom-24 md:bottom-12 px-6"
+         className="absolute text-center text-white/90 font-light
+             text-[13px] md:text-[19px]
+             bottom-24 md:bottom-12 px-6"
       >
         THIS IS FOOD THAT MOVES YOU
         <br />
@@ -79,12 +81,14 @@ const HeroSection = () => {
       </motion.p>
 
       {/* CTA LEFT */}
-      <div className="absolute bottom-6 left-6 md:left-10 text-white text-xs md:text-xl">
-        NEED A HAND?
-      </div>
+     <div className="absolute bottom-6 left-6 md:left-10 text-white
+                text-[11px] md:text-[17px]">
+  NEED A HAND?
+</div>
+
 
       {/* CTA RIGHT */}
-      <div className="absolute bottom-6 right-6 md:right-10 text-white text-xs md:text-xl">
+      <div className="absolute bottom-6 right-6 md:right-10 text-white text-[11px] md:text-[17px]">
         COMING RIGHT UP!
       </div>
 

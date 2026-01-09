@@ -1,5 +1,24 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+// Food
+import food1 from "@/assets/portfolio-1.png";
+import food2 from "@/assets/portfolio-2.png";
+import food3 from "@/assets/portfolio-3.png";
+
+// Drinks
+import drinks1 from "@/assets/portfolio-4.png";
+import drinks2 from "@/assets/portfolio-5.png";
+import drinks3 from "@/assets/portfolio-6.png";
+
+// Cocktails
+import cocktails1 from "@/assets/portfolio-7.png";
+import cocktails2 from "@/assets/portfolio-8.png";
+import cocktails3 from "@/assets/portfolio-9.png";
+
+// Music
+import music1 from "@/assets/portfolio-10.png";
+import music2 from "@/assets/portfolio-12.png";
+import music3 from "@/assets/portfolio-8.png";
 
 interface Project {
   name: string;
@@ -10,46 +29,31 @@ interface Project {
 
 const projects: Project[] = [
   {
-    name: "everfit",
-    industry: "Fitness",
+    name: "Food",
+    industry: "Food",
     timeline: "(23)-(25)",
-    images: [
-      "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&h=400&fit=crop",
-    ],
+    images: [food1, food2, food3],
   },
   {
-    name: "Sumenki",
-    industry: "EdTech",
+    name: "Drinks",
+    industry: "Drinks",
     timeline: "(23)-(25)",
-    images: [
-      "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=400&fit=crop",
-    ],
+    images: [drinks1, drinks2, drinks3],
   },
   {
-    name: "Flux Labs",
-    industry: "Blockchain",
+    name: "Cocktails",
+    industry: "Cocktails",
     timeline: "(24)-(25)",
-    images: [
-      "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1622630998477-20aa696ecb05?w=600&h=400&fit=crop",
-    ],
+    images: [cocktails1, cocktails2, cocktails3],
   },
   {
-    name: "Mindful",
-    industry: "Healthcare",
+    name: "Music",
+    industry: "Music",
     timeline: "(22)-(24)",
-    images: [
-      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=600&h=400&fit=crop",
-    ],
+    images: [music1, music2, music3],
   },
 ];
+
 
 const ProjectRow = ({ project, index }: { project: Project; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);

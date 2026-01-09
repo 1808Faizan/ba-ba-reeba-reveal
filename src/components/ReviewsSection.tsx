@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import review1 from '@/assets/review-1.jpg';
-import review2 from '@/assets/review-2.jpg';
-import review3 from '@/assets/review-3.jpg';
+import review1 from '@/assets/img-1.jpg';
+import review2 from '@/assets/img-2.jpg';
+import review3 from '@/assets/img-3.jpg';
 
 const reviews = [
   {
