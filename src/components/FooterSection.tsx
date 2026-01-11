@@ -1,7 +1,9 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import logo from "@/assets/logo.png"; // adjust path if needed
-import logoHover from "@/assets/logo-2.png"; // second logo
+import { Link } from 'react-router-dom';
+import logo from "@/assets/logo.png";
+import logoHover from "@/assets/logo-2.png";
+
 const FooterSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   
@@ -13,7 +15,12 @@ const FooterSection = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [0.9, 1]);
 
-  const navItems = ['Home', 'Menu', 'Reservation' , 'Gallery', 'Contact'];
+  const navItems = [
+    { name: 'Home', path: '/' },
+    { name: 'Menu', path: '/menu' },
+    { name: 'Gallery', path: '/gallery' },
+    { name: 'Contact', path: '/contact' },
+  ];
   const legalItems = ['Privacy & Policy', 'Terms Of Services'];
 
   return (
@@ -60,16 +67,16 @@ const FooterSection = () => {
              md:flex-nowrap md:gap-16"
 >
   {navItems.map((item) => (
-    <a
-      key={item}
-      href={`#${item.toLowerCase()}`}
+    <Link
+      key={item.name}
+      to={item.path}
       className="font-display text-base md:text-lg
                  tracking-widest text-muted-foreground
                  hover:text-foreground transition-colors
                  duration-300 uppercase"
     >
-      {item}
-    </a>
+      {item.name}
+    </Link>
   ))}
 </motion.nav>
 
