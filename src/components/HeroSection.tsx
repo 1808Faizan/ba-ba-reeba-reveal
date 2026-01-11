@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import heroBg from "@/assets/Back-ground-video.mp4";
 import cdIcon from "@/assets/Mute-Unmute.png";
+
 const HeroSection = () => {
   const brandName = "BABAREEBA";
   const letters = brandName.split("");
@@ -13,11 +14,31 @@ const HeroSection = () => {
   });
   const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
   const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false); // Start unmuted
+
+  // Try to autoplay with sound on load
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.muted = false;
+      const playPromise = video.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Browser blocked unmuted autoplay, fall back to muted
+          video.muted = true;
+          setMuted(true);
+          video.play();
+        });
+      }
+    }
+  }, []);
+
   const toggleMute = () => {
     if (videoRef.current) {
-      videoRef.current.muted = !muted;
-      setMuted(!muted);
+      const newMuted = !muted;
+      videoRef.current.muted = newMuted;
+      setMuted(newMuted);
     }
   };
   return (
