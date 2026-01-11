@@ -161,8 +161,8 @@ const CircleScrollAnimation: React.FC = () => {
           )}
 
           <div className="text">
-            Curiosity, friction, iteration:
-            <br/>The machinery of my design
+            Good music. Great crowd. Perfect vibes.
+            <br/>Just a glimpse of what awaits you inside
           </div>
 
           {portfolioImages.map((img,i)=>{

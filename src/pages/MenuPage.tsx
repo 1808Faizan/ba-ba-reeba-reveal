@@ -7,6 +7,7 @@ import menuFront from "@/assets/menu-front.jpeg";
 import menuLeft from "@/assets/menu-left.jpeg";
 import menuRight from "@/assets/menu-right.jpeg";
 import menuBack from "@/assets/menu-back.jpeg";
+import Header from "@/components/Header";
 
 const menuPages = [
   { src: menuFront, label: "Front Cover" },
@@ -41,7 +42,6 @@ const MenuPage = () => {
     }
   };
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") nextPage();
@@ -56,7 +56,7 @@ const MenuPage = () => {
     enter: (direction: number) => ({
       rotateY: direction > 0 ? 90 : -90,
       opacity: 0,
-      scale: 0.8,
+      scale: 0.85,
     }),
     center: {
       rotateY: 0,
@@ -66,77 +66,72 @@ const MenuPage = () => {
     exit: (direction: number) => ({
       rotateY: direction < 0 ? 90 : -90,
       opacity: 0,
-      scale: 0.8,
+      scale: 0.85,
     }),
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center relative overflow-hidden">
-      {/* Ambient Background Effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[150px] animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[200px]" />
+    <div className="min-h-screen bg-black relative overflow-hidden flex flex-col items-center justify-center">
+      <Header />
+      {/* Background Glow */}
+      <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[150px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-[120px]" />
       </div>
+      {/* ===== TOP TITLE ===== */}
+      <motion.div
+  className="absolute top-24  inset-x-0 z-30 flex flex-col items-center text-center pointer-events-none"
+  initial={{ opacity: 0, y: -16 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.2 }}
+>
+  <h1 className="font-display text-4xl md:text-5xl text-primary tracking-widest">
+    OUR MENU
+  </h1>
+  <p className="mt-2 text-xs tracking-[0.35em] text-white/60 whitespace-nowrap">
+    CRAFTED WITH PASSION
+  </p>
+</motion.div>
 
-      {/* Noise Overlay */}
-      <div className="noise-overlay" />
 
-      {/* Close Button */}
-      <motion.button
-        onClick={() => navigate("/")}
-        className="fixed top-6 right-6 text-white/70 hover:text-white z-50 p-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
-        whileHover={{ scale: 1.1, rotate: 90 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <X size={24} />
-      </motion.button>
-
-      {/* Title */}
-      <motion.div 
-        className="absolute top-8 left-1/2 -translate-x-1/2 text-center z-20"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        <h1 className="font-display text-4xl md:text-5xl text-primary tracking-wider">OUR MENU</h1>
-        <p className="text-white/50 text-sm tracking-widest mt-2">CRAFTED WITH PASSION</p>
-      </motion.div>
-
-      {/* Navigation Arrows */}
+      {/* Navigation */}
       <motion.button
         onClick={prevPage}
-        className={`absolute left-4 md:left-12 top-1/2 -translate-y-1/2 z-30 p-3 md:p-4 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition-all ${currentPage === 0 ? "opacity-30 pointer-events-none" : ""}`}
-        whileHover={{ scale: 1.1, x: -5 }}
-        whileTap={{ scale: 0.9 }}
+        className={`absolute left-6 top-1/2 -translate-y-1/2 z-30 p-4 rounded-full bg-white/5 border border-white/10 text-white/70 ${
+          currentPage === 0 && "opacity-30 pointer-events-none"
+        }`}
+        whileHover={{ scale: 1.1, x: -6 }}
       >
         <ChevronLeft size={28} />
       </motion.button>
 
       <motion.button
         onClick={nextPage}
-        className={`absolute right-4 md:right-12 top-1/2 -translate-y-1/2 z-30 p-3 md:p-4 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition-all ${currentPage === menuPages.length - 1 ? "opacity-30 pointer-events-none" : ""}`}
-        whileHover={{ scale: 1.1, x: 5 }}
-        whileTap={{ scale: 0.9 }}
+        className={`absolute right-6 top-1/2 -translate-y-1/2 z-30 p-4 rounded-full bg-white/5 border border-white/10 text-white/70 ${
+          currentPage === menuPages.length - 1 &&
+          "opacity-30 pointer-events-none"
+        }`}
+        whileHover={{ scale: 1.1, x: 6 }}
       >
         <ChevronRight size={28} />
       </motion.button>
 
-      {/* Menu Card Container */}
-      <div 
-        className="relative flex items-center justify-center w-full h-[75vh] md:h-[85vh] cursor-pointer px-4"
-        style={{ perspective: "1500px" }}
-        onClick={nextPage}
-      >
-        {/* Card Shadow */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[60%] h-8 bg-black/50 rounded-[50%] blur-2xl" />
+      {/* Menu Card */}
+      <div
+  className="
+    relative w-full 
+    h-[80vh] 
+    flex items-center justify-center 
+    px-4 
+    mt-16 
+    md:mt-32 
+    lg:mt-40
+  "
+  style={{ perspective: "1500px" }}
+  onClick={nextPage}
+>
 
-        {/* Card Glow */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[80%] max-w-3xl h-[80%] bg-gradient-to-br from-primary/20 via-transparent to-amber-500/20 rounded-2xl blur-xl opacity-50" />
-        </div>
-
-        <AnimatePresence initial={false} custom={direction} mode="wait">
+        <AnimatePresence custom={direction} mode="wait">
           <motion.div
             key={currentPage}
             custom={direction}
@@ -144,73 +139,24 @@ const MenuPage = () => {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{
-              rotateY: { type: "spring", stiffness: 100, damping: 20, duration: 0.8 },
-              opacity: { duration: 0.4 },
-              scale: { duration: 0.4 },
-            }}
-            className="relative max-w-full max-h-full"
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             style={{ transformStyle: "preserve-3d" }}
           >
-            {/* Card Frame */}
-            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-              {/* Image - Full display with contain */}
+            <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
               <img
                 src={menuPages[currentPage].src}
                 alt={menuPages[currentPage].label}
-                className="max-w-[90vw] max-h-[70vh] md:max-h-[80vh] w-auto h-auto object-contain"
+                className="max-h-[75vh] max-w-[90vw] object-contain"
               />
-              
-              {/* Corner Accents */}
-              <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/50" />
-              <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/50" />
-              <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-primary/50" />
-              <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-primary/50" />
             </div>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Page Indicators */}
-      <motion.div 
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        {menuPages.map((page, idx) => (
-          <button
-            key={idx}
-            onClick={(e) => {
-              e.stopPropagation();
-              goToPage(idx);
-            }}
-            className="group relative"
-          >
-            <motion.div
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                idx === currentPage 
-                  ? "bg-primary w-8" 
-                  : "bg-white/30 hover:bg-white/50"
-              }`}
-              layoutId="pageIndicator"
-            />
-            <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-xs text-white/50 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-              {page.label}
-            </span>
-          </button>
-        ))}
-      </motion.div>
-
-      {/* Hint Text */}
-      <motion.p 
-        className="absolute bottom-20 text-white/40 text-xs tracking-[0.3em] uppercase"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-      >
-        Click card or use arrows to navigate
-      </motion.p>
+      {/* Hint */}
+      <p className="absolute bottom-10 text-xs tracking-[0.3em] text-white/40 uppercase">
+        Click or use arrows to navigate
+      </p>
     </div>
   );
 };

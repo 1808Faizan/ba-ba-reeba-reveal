@@ -43,7 +43,7 @@ const Header = () => {
                 key="logo1"
                 src={logo}
                 alt="Babareeba Logo"
-                className="h-8 md:h-14 object-contain"
+                className="h-14 md:h-16 object-contain"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -54,7 +54,8 @@ const Header = () => {
                 key="logo2"
                 src={logo2}
                 alt="Babareeba Logo Hover"
-                className="h-8 md:h-14 object-contain"
+                className="h-14 md:h-16
+                 object-contain"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}

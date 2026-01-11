@@ -60,10 +60,9 @@ const ReviewsSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-section-title text-foreground mb-12 md:mb-16 text-center"
+            className="text-section-title text-1xl text-foreground mb-12 md:mb-16 text-center"
           >
-            THEY SAY
-          </motion.h2>
+what they say's          </motion.h2>
 
           {/* Reviews container - stacked on top of each other */}
           <div className="relative h-[60vh] flex items-center justify-center">
