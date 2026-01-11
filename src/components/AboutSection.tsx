@@ -35,9 +35,9 @@ const AboutSection = () => {
     <section
       id="about"
       ref={sectionRef}
-      className="relative min-h-screen py-20 md:py-32 overflow-hidden"
+      className="relative min-h-screen pt-8 pb-20 md:pt-16 md:pb-32 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 mt-0">
         <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_2fr_1fr] gap-8 items-center">
 
           {/* LEFT IMAGES */}
