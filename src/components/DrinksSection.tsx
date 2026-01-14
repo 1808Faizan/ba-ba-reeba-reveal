@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import drink1 from '@/assets/drink-1.jpg';
 import drink2 from '@/assets/drink-2.jpg';
 import drink3 from '@/assets/drink-3.jpg';
@@ -12,6 +13,7 @@ const drinks = [
     description: "Bourbon, bitters, orange peel, sugar cube", 
     image: drink1,
     color: "#D4A574",
+    price: "$18",
     ingredients: ["Bourbon", "Angostura Bitters", "Orange Peel", "Sugar"]
   },
   { 
@@ -19,6 +21,7 @@ const drinks = [
     description: "Gin, violet liqueur, fresh lemon, lavender", 
     image: drink2,
     color: "#9B7BB8",
+    price: "$22",
     ingredients: ["Gin", "Crème de Violette", "Lemon", "Lavender"]
   },
   { 
@@ -26,6 +29,7 @@ const drinks = [
     description: "White rum, mint leaves, lime, cane sugar", 
     image: drink3,
     color: "#7CB882",
+    price: "$16",
     ingredients: ["White Rum", "Fresh Mint", "Lime", "Sugar Cane"]
   },
   { 
@@ -33,6 +37,7 @@ const drinks = [
     description: "Gin, Campari, sweet vermouth, blood orange", 
     image: drink4,
     color: "#E85D4C",
+    price: "$20",
     ingredients: ["Gin", "Campari", "Vermouth", "Blood Orange"]
   },
   { 
@@ -40,338 +45,476 @@ const drinks = [
     description: "Champagne, elderflower, fresh strawberry", 
     image: drink5,
     color: "#F5D76E",
+    price: "$24",
     ingredients: ["Champagne", "Elderflower", "Strawberry", "Gold Leaf"]
   },
 ];
 
 const DrinksSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isHovering, setIsHovering] = useState(false);
-  
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
-
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
-  const titleY = useTransform(scrollYProgress, [0, 0.15], [80, 0]);
-  
+  const [direction, setDirection] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: horizontalProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"]
-  });
   
-  const horizontalX = useTransform(horizontalProgress, [0, 1], ["5%", "-55%"]);
+  const dragX = useMotionValue(0);
+  const dragProgress = useTransform(dragX, [-200, 0, 200], [-1, 0, 1]);
 
-  // Magnetic cursor effect
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const nextSlide = () => {
+    setDirection(1);
+    setActiveIndex((prev) => (prev + 1) % drinks.length);
+  };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+  const prevSlide = () => {
+    setDirection(-1);
+    setActiveIndex((prev) => (prev - 1 + drinks.length) % drinks.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setDirection(index > activeIndex ? 1 : -1);
+    setActiveIndex(index);
+  };
+
+  // Auto-play
+  useEffect(() => {
+    if (isDragging) return;
+    const timer = setInterval(nextSlide, 5000);
+    return () => clearInterval(timer);
+  }, [isDragging, activeIndex]);
+
+  const getCardStyle = (index: number) => {
+    const diff = index - activeIndex;
+    const totalCards = drinks.length;
+    
+    // Handle wrap-around
+    let adjustedDiff = diff;
+    if (diff > totalCards / 2) adjustedDiff = diff - totalCards;
+    if (diff < -totalCards / 2) adjustedDiff = diff + totalCards;
+
+    const isActive = adjustedDiff === 0;
+    const isNext = adjustedDiff === 1;
+    const isPrev = adjustedDiff === -1;
+    const isFar = Math.abs(adjustedDiff) > 1;
+
+    return {
+      x: isActive ? 0 : isPrev ? -320 : isNext ? 320 : adjustedDiff * 320,
+      scale: isActive ? 1 : isPrev || isNext ? 0.85 : 0.7,
+      rotateY: isActive ? 0 : isPrev ? 15 : isNext ? -15 : adjustedDiff > 0 ? -25 : 25,
+      z: isActive ? 100 : isPrev || isNext ? 50 : 0,
+      opacity: isFar ? 0 : isActive ? 1 : 0.6,
+      filter: isActive ? 'blur(0px)' : 'blur(2px)',
+    };
+  };
+
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 400 : -400,
+      opacity: 0,
+      scale: 0.8,
+      rotateY: direction > 0 ? -30 : 30,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      rotateY: 0,
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? 400 : -400,
+      opacity: 0,
+      scale: 0.8,
+      rotateY: direction < 0 ? -30 : 30,
+    }),
   };
 
   return (
-    <section 
-      ref={sectionRef}
-      className="relative h-[250vh] noise-overlay top-32"
-      onMouseMove={handleMouseMove}
-    >
-      {/* Animated Background Gradient */}
-      <motion.div 
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{
-          background: `radial-gradient(800px circle at ${mousePosition.x}px ${mousePosition.y}px, ${drinks[activeIndex].color}08, transparent 40%)`,
-        }}
-      />
-
-      {/* Sticky container */}
-      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden py-12">
+    <section className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-b from-background via-background to-muted/10">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Radial Glow */}
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-30"
+          animate={{
+            background: `radial-gradient(circle, ${drinks[activeIndex].color}40 0%, transparent 70%)`,
+          }}
+          transition={{ duration: 0.8 }}
+        />
         
-        {/* Floating Decorative Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(6)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 rounded-full bg-primary/30"
-              style={{
-                left: `${15 + i * 15}%`,
-                top: `${20 + (i % 3) * 25}%`,
-              }}
-              animate={{
-                y: [0, -30, 0],
-                opacity: [0.3, 0.8, 0.3],
-                scale: [1, 1.5, 1],
-              }}
-              transition={{
-                duration: 4 + i,
-                repeat: Infinity,
-                delay: i * 0.5,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Title Section with Reveal Animation */}
-        <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
+        {/* Floating Orbs */}
+        {[...Array(5)].map((_, i) => (
           <motion.div
-            style={{ opacity: titleOpacity, y: titleY }}
-            className="text-center relative"
+            key={i}
+            className="absolute w-2 h-2 rounded-full bg-primary/20"
+            style={{
+              left: `${20 + i * 15}%`,
+              top: `${30 + (i % 3) * 20}%`,
+            }}
+            animate={{
+              y: [0, -40, 0],
+              opacity: [0.2, 0.6, 0.2],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 4 + i,
+              repeat: Infinity,
+              delay: i * 0.8,
+            }}
+          />
+        ))}
+
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 opacity-[0.02]" 
+          style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), 
+                             linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px'
+          }}
+        />
+      </div>
+
+      {/* Title Section */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 mb-16 md:mb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center"
+        >
+          {/* Decorative Line */}
+          <motion.div 
+            className="flex items-center justify-center gap-4 mb-6"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
           >
-            {/* Decorative line */}
             <motion.div 
-              className="w-24 h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mb-8"
+              className="w-16 h-[1px] bg-gradient-to-r from-transparent to-primary"
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-            />
-            
-            <motion.span 
-              className="text-xs md:text-sm tracking-[0.4em] text-primary/80 uppercase block mb-4"
-              initial={{ opacity: 0, letterSpacing: "0.1em" }}
-              whileInView={{ opacity: 1, letterSpacing: "0.4em" }}
               transition={{ duration: 0.8 }}
-            >
-              Cocktail Selection
-            </motion.span>
-            
-            <h2 className="text-section-title text-foreground mb-6 font-brand-serif">
-              <motion.span
-                className="inline-block"
-                initial={{ opacity: 0, rotateX: -90 }}
-                whileInView={{ opacity: 1, rotateX: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                SIGNATURE
-              </motion.span>
-              {" "}
-              <motion.span
-                className="inline-block text-primary"
-                initial={{ opacity: 0, rotateX: -90 }}
-                whileInView={{ opacity: 1, rotateX: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                CRAFTS
-              </motion.span>
-            </h2>
-            
-            <motion.p 
-              className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              Each pour tells a story. Discover our handcrafted cocktail selection, 
-              <br className="hidden md:block" />
-              meticulously crafted by our master mixologists.
-            </motion.p>
-          </motion.div>
-        </div>
-
-        {/* Horizontal Scroll Container with 3D Cards */}
-        <motion.div 
-          ref={containerRef}
-          style={{ x: horizontalX }}
-          className="flex gap-6 md:gap-10 px-6 md:px-12"
-        >
-          {drinks.map((drink, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 100, rotateY: -15 }}
-              whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ 
-                duration: 0.8, 
-                delay: index * 0.15,
-                ease: [0.25, 0.1, 0.25, 1]
-              }}
-              onMouseEnter={() => {
-                setActiveIndex(index);
-                setIsHovering(true);
-              }}
-              onMouseLeave={() => setIsHovering(false)}
-              className="group relative w-72 md:w-96 flex-shrink-0 perspective-1000"
-            >
-              {/* Glow Ring Behind Card */}
-              <motion.div
-                className="absolute -inset-4 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-2xl"
-                style={{ background: `radial-gradient(circle, ${drink.color}40, transparent 70%)` }}
-              />
-
-              {/* Main Card */}
-              <motion.div 
-                whileHover={{ 
-                  y: -20, 
-                  rotateY: 5,
-                  rotateX: -5,
-                  scale: 1.02,
-                }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative overflow-hidden bg-gradient-to-b from-muted/20 to-background/80 backdrop-blur-sm border border-white/10 rounded-2xl group-hover:border-primary/40 transition-all duration-700 shadow-2xl"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                {/* Image Container */}
-                <div className="relative h-[22rem] md:h-[28rem] overflow-hidden">
-                  <motion.img 
-                    src={drink.image} 
-                    alt={drink.name}
-                    className="w-full h-full object-cover"
-                    whileHover={{ scale: 1.15 }}
-                    transition={{ duration: 1, ease: "easeOut" }}
-                  />
-                  
-                  {/* Multi-layer Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-background/40" />
-                  
-                  {/* Color Accent Glow */}
-                  <motion.div 
-                    className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-700"
-                    style={{ background: `linear-gradient(135deg, ${drink.color}40, transparent 60%)` }}
-                  />
-
-                  {/* Drink Number */}
-                  <motion.div
-                    className="absolute top-4 left-4 text-6xl md:text-7xl font-brand-serif text-white/5 group-hover:text-white/15 transition-all duration-500"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    0{index + 1}
-                  </motion.div>
-
-                  {/* Animated Border */}
-                  <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <motion.rect
-                      x="1"
-                      y="1"
-                      width="calc(100% - 2px)"
-                      height="calc(100% - 2px)"
-                      rx="16"
-                      fill="none"
-                      stroke={drink.color}
-                      strokeWidth="1"
-                      strokeDasharray="8 4"
-                      initial={{ pathLength: 0 }}
-                      whileHover={{ pathLength: 1 }}
-                      transition={{ duration: 1.5, ease: "easeInOut" }}
-                    />
-                  </svg>
-                </div>
-                
-                {/* Content */}
-                <motion.div 
-                  className="absolute bottom-0 left-0 right-0 p-6 md:p-8"
-                  initial={{ y: 20 }}
-                  whileHover={{ y: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  {/* Category Tag */}
-                  <motion.span
-                    className="inline-block px-3 py-1 text-[10px] md:text-xs tracking-widest uppercase rounded-full mb-3 border"
-                    style={{ 
-                      borderColor: `${drink.color}60`,
-                      color: drink.color,
-                      backgroundColor: `${drink.color}15`
-                    }}
-                  >
-                    Signature
-                  </motion.span>
-
-                  <h3 className="font-brand-serif text-2xl md:text-3xl tracking-wider text-foreground mb-2 group-hover:text-primary transition-colors duration-500">
-                    {drink.name}
-                  </h3>
-                  
-                  <motion.p 
-                    className="text-sm text-muted-foreground mb-4 opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                  >
-                    {drink.description}
-                  </motion.p>
-
-                  {/* Ingredients Pills */}
-                  <motion.div 
-                    className="flex flex-wrap gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0"
-                  >
-                    {drink.ingredients.map((ingredient, i) => (
-                      <motion.span
-                        key={i}
-                        className="text-[10px] px-2 py-1 rounded-full bg-white/5 text-muted-foreground border border-white/10"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: i * 0.1 }}
-                      >
-                        {ingredient}
-                      </motion.span>
-                    ))}
-                  </motion.div>
-                </motion.div>
-
-                {/* Corner Accent */}
-                <motion.div
-                  className="absolute top-0 right-0 w-20 h-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    background: `linear-gradient(135deg, transparent 50%, ${drink.color}20 50%)`,
-                  }}
-                />
-              </motion.div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Enhanced Progress Indicator */}
-        <motion.div 
-          style={{ opacity: titleOpacity }}
-          className="flex flex-col items-center mt-12 md:mt-16 gap-4"
-        >
-          {/* Drink Dots */}
-          <div className="flex gap-3">
-            {drinks.map((drink, index) => (
-              <motion.button
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-500 ${
-                  activeIndex === index ? 'w-8' : 'w-2'
-                }`}
-                style={{ 
-                  backgroundColor: activeIndex === index ? drink.color : 'rgba(255,255,255,0.2)'
-                }}
-                whileHover={{ scale: 1.3 }}
-                whileTap={{ scale: 0.9 }}
-              />
-            ))}
-          </div>
-
-          {/* Progress Bar */}
-          <div className="w-48 md:w-64 h-[2px] bg-muted/20 rounded-full overflow-hidden">
-            <motion.div 
-              style={{ scaleX: horizontalProgress }}
-              className="h-full origin-left rounded-full"
-              initial={{ backgroundColor: drinks[0].color }}
-              animate={{ backgroundColor: drinks[activeIndex].color }}
-              transition={{ duration: 0.5 }}
             />
-          </div>
+            <Sparkles className="w-4 h-4 text-primary" />
+            <motion.div 
+              className="w-16 h-[1px] bg-gradient-to-l from-transparent to-primary"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              transition={{ duration: 0.8 }}
+            />
+          </motion.div>
 
-          {/* Active Drink Name */}
-          <AnimatePresence mode="wait">
+          <motion.span 
+            className="text-xs md:text-sm tracking-[0.4em] text-primary/80 uppercase block mb-4"
+            initial={{ opacity: 0, letterSpacing: "0.1em" }}
+            whileInView={{ opacity: 1, letterSpacing: "0.4em" }}
+            transition={{ duration: 0.8 }}
+          >
+            Cocktail Selection
+          </motion.span>
+          
+          <h2 className="text-section-title text-foreground mb-6 font-brand-serif">
             <motion.span
-              key={activeIndex}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="text-xs tracking-[0.3em] uppercase text-muted-foreground"
+              className="inline-block"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
             >
-              {drinks[activeIndex].name}
+              SIGNATURE
             </motion.span>
-          </AnimatePresence>
+            {" "}
+            <motion.span
+              className="inline-block text-primary"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              CRAFTS
+            </motion.span>
+          </h2>
+          
+          <motion.p 
+            className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            Each pour tells a story. Discover our handcrafted cocktail selection.
+          </motion.p>
         </motion.div>
       </div>
+
+      {/* Card Carousel */}
+      <div 
+        ref={containerRef}
+        className="relative z-10 h-[500px] md:h-[600px] flex items-center justify-center"
+        style={{ perspective: '1200px' }}
+      >
+        {/* Cards Container */}
+        <div className="relative w-full max-w-[280px] md:max-w-[340px] h-full">
+          <AnimatePresence mode="popLayout" custom={direction}>
+            {drinks.map((drink, index) => {
+              const style = getCardStyle(index);
+              const isActive = index === activeIndex;
+
+              return (
+                <motion.div
+                  key={drink.name}
+                  custom={direction}
+                  initial="enter"
+                  animate={{
+                    x: style.x,
+                    scale: style.scale,
+                    rotateY: style.rotateY,
+                    zIndex: style.z,
+                    opacity: style.opacity,
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                  }}
+                  onClick={() => !isActive && goToSlide(index)}
+                  className={`absolute inset-0 cursor-pointer ${!isActive ? 'pointer-events-auto' : ''}`}
+                  style={{ 
+                    transformStyle: 'preserve-3d',
+                    filter: style.filter,
+                  }}
+                  drag={isActive ? "x" : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.1}
+                  onDragStart={() => setIsDragging(true)}
+                  onDragEnd={(_, info) => {
+                    setIsDragging(false);
+                    if (info.offset.x > 100) prevSlide();
+                    else if (info.offset.x < -100) nextSlide();
+                  }}
+                >
+                  {/* Card */}
+                  <motion.div 
+                    className="w-full h-full rounded-3xl overflow-hidden bg-gradient-to-b from-muted/30 to-background/90 backdrop-blur-xl border border-white/10 shadow-2xl"
+                    whileHover={isActive ? { y: -10 } : {}}
+                    style={{
+                      boxShadow: isActive 
+                        ? `0 25px 50px -12px ${drink.color}30, 0 0 0 1px ${drink.color}20` 
+                        : '0 25px 50px -12px rgba(0,0,0,0.25)',
+                    }}
+                  >
+                    {/* Image */}
+                    <div className="relative h-[55%] overflow-hidden">
+                      <motion.img 
+                        src={drink.image} 
+                        alt={drink.name}
+                        className="w-full h-full object-cover"
+                        animate={isActive ? { scale: 1.05 } : { scale: 1 }}
+                        transition={{ duration: 0.6 }}
+                      />
+                      
+                      {/* Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                      
+                      {/* Color Accent */}
+                      <motion.div 
+                        className="absolute inset-0"
+                        animate={{ 
+                          background: isActive 
+                            ? `linear-gradient(135deg, ${drink.color}20 0%, transparent 50%)`
+                            : 'transparent'
+                        }}
+                        transition={{ duration: 0.5 }}
+                      />
+
+                      {/* Number Badge */}
+                      <motion.div
+                        className="absolute top-4 left-4 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border"
+                        style={{ 
+                          borderColor: `${drink.color}60`,
+                          backgroundColor: `${drink.color}20`,
+                          color: drink.color,
+                        }}
+                        animate={isActive ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0.5 }}
+                      >
+                        0{index + 1}
+                      </motion.div>
+
+                      {/* Price Tag */}
+                      <motion.div
+                        className="absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-semibold bg-background/80 backdrop-blur-sm border border-white/20"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        {drink.price}
+                      </motion.div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6 h-[45%] flex flex-col">
+                      {/* Category */}
+                      <motion.span
+                        className="inline-flex items-center gap-1 text-[10px] tracking-widest uppercase mb-3"
+                        style={{ color: drink.color }}
+                        initial={{ opacity: 0 }}
+                        animate={isActive ? { opacity: 1 } : { opacity: 0.5 }}
+                      >
+                        <span className="w-4 h-[1px]" style={{ backgroundColor: drink.color }} />
+                        Signature Cocktail
+                      </motion.span>
+
+                      {/* Title */}
+                      <motion.h3 
+                        className="font-brand-serif text-2xl md:text-3xl tracking-wide text-foreground mb-2"
+                        animate={isActive ? { y: 0, opacity: 1 } : { y: 10, opacity: 0.7 }}
+                      >
+                        {drink.name}
+                      </motion.h3>
+                      
+                      {/* Description */}
+                      <motion.p 
+                        className="text-sm text-muted-foreground mb-4 line-clamp-2"
+                        animate={isActive ? { opacity: 1 } : { opacity: 0.5 }}
+                      >
+                        {drink.description}
+                      </motion.p>
+
+                      {/* Ingredients */}
+                      <motion.div 
+                        className="flex flex-wrap gap-1.5 mt-auto"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        {drink.ingredients.slice(0, 3).map((ingredient, i) => (
+                          <span
+                            key={i}
+                            className="text-[10px] px-2 py-1 rounded-full bg-white/5 text-muted-foreground border border-white/10"
+                          >
+                            {ingredient}
+                          </span>
+                        ))}
+                        {drink.ingredients.length > 3 && (
+                          <span className="text-[10px] px-2 py-1 text-muted-foreground">
+                            +{drink.ingredients.length - 3}
+                          </span>
+                        )}
+                      </motion.div>
+                    </div>
+
+                    {/* Bottom Glow Line */}
+                    <motion.div
+                      className="absolute bottom-0 left-0 right-0 h-1"
+                      animate={{
+                        background: isActive 
+                          ? `linear-gradient(90deg, transparent, ${drink.color}, transparent)`
+                          : 'transparent'
+                      }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </motion.div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+
+        {/* Navigation Arrows */}
+        <motion.button
+          onClick={prevSlide}
+          className="absolute left-4 md:left-12 lg:left-24 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full bg-background/80 backdrop-blur-sm border border-white/10 flex items-center justify-center text-foreground hover:text-primary hover:border-primary/50 transition-all duration-300 group"
+          whileHover={{ scale: 1.1, x: -5 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 group-hover:-translate-x-0.5 transition-transform" />
+        </motion.button>
+
+        <motion.button
+          onClick={nextSlide}
+          className="absolute right-4 md:right-12 lg:right-24 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full bg-background/80 backdrop-blur-sm border border-white/10 flex items-center justify-center text-foreground hover:text-primary hover:border-primary/50 transition-all duration-300 group"
+          whileHover={{ scale: 1.1, x: 5 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <ChevronRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-0.5 transition-transform" />
+        </motion.button>
+      </div>
+
+      {/* Progress Indicators */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        className="relative z-10 flex flex-col items-center gap-6 mt-8 md:mt-12"
+      >
+        {/* Dots */}
+        <div className="flex items-center gap-3">
+          {drinks.map((drink, index) => (
+            <motion.button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className="relative group"
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <motion.div
+                className="w-3 h-3 rounded-full transition-all duration-500"
+                animate={{
+                  scale: activeIndex === index ? 1 : 0.7,
+                  backgroundColor: activeIndex === index ? drink.color : 'rgba(255,255,255,0.2)',
+                }}
+              />
+              
+              {/* Active Ring */}
+              {activeIndex === index && (
+                <motion.div
+                  className="absolute inset-0 rounded-full border-2"
+                  style={{ borderColor: drink.color }}
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1.8, opacity: 0 }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                />
+              )}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Progress Bar */}
+        <div className="w-48 md:w-64 h-1 bg-muted/20 rounded-full overflow-hidden">
+          <motion.div
+            className="h-full rounded-full"
+            animate={{
+              width: `${((activeIndex + 1) / drinks.length) * 100}%`,
+              backgroundColor: drinks[activeIndex].color,
+            }}
+            transition={{ duration: 0.5 }}
+          />
+        </div>
+
+        {/* Drink Counter */}
+        <div className="flex items-center gap-2 text-sm">
+          <motion.span 
+            key={activeIndex}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="font-brand-serif text-2xl"
+            style={{ color: drinks[activeIndex].color }}
+          >
+            0{activeIndex + 1}
+          </motion.span>
+          <span className="text-muted-foreground">/</span>
+          <span className="text-muted-foreground">0{drinks.length}</span>
+        </div>
+
+        {/* Active Drink Name */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeIndex}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="text-center"
+          >
+            <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">
+              {drinks[activeIndex].name}
+            </span>
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
     </section>
   );
 };
