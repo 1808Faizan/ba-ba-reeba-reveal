@@ -91,13 +91,27 @@ html, body, #root {
     letter-spacing: 0.05em;
   }
 
-  /* Hero brand text - Elegant Serif */
+  /* Hero brand text - Elegant Serif - Responsive */
   .text-hero-brand {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 12vw, 10rem);
+    font-size: clamp(2rem, 10vw, 8rem);
     line-height: 0.9;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     font-weight: 700;
+  }
+
+  @media (min-width: 640px) {
+    .text-hero-brand {
+      font-size: clamp(2.5rem, 11vw, 9rem);
+      letter-spacing: 0.12em;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .text-hero-brand {
+      font-size: clamp(3rem, 12vw, 10rem);
+      letter-spacing: 0.15em;
+    }
   }
 
   /* Hero brand text serif for hero section */
@@ -115,12 +129,24 @@ html, body, #root {
     letter-spacing: 0.05em;
   }
 
-  /* Section title */
+  /* Section title - Responsive */
   .text-section-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-size: clamp(1.75rem, 6vw, 5rem);
     line-height: 1;
     letter-spacing: 0.02em;
+  }
+
+  @media (min-width: 640px) {
+    .text-section-title {
+      font-size: clamp(2rem, 7vw, 5.5rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .text-section-title {
+      font-size: clamp(2.5rem, 8vw, 6rem);
+    }
   }
 
   /* Feature text */
