@@ -51,6 +51,13 @@ const drinks = [
 ];
 
 const DrinksSection = () => {
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -81,9 +88,20 @@ const DrinksSection = () => {
     return () => clearInterval(timer);
   }, [isDragging, activeIndex]);
 
+  // Responsive offset values
+  const getOffset = () => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 640) return 180; // mobile
+      if (window.innerWidth < 768) return 220; // tablet
+      return 280; // desktop
+    }
+    return 280;
+  };
+
   const getCardStyle = (index: number) => {
     const diff = index - activeIndex;
     const totalCards = drinks.length;
+    const offset = getOffset();
     
     // Handle wrap-around
     let adjustedDiff = diff;
@@ -96,12 +114,12 @@ const DrinksSection = () => {
     const isFar = Math.abs(adjustedDiff) > 1;
 
     return {
-      x: isActive ? 0 : isPrev ? -320 : isNext ? 320 : adjustedDiff * 320,
-      scale: isActive ? 1 : isPrev || isNext ? 0.85 : 0.7,
-      rotateY: isActive ? 0 : isPrev ? 15 : isNext ? -15 : adjustedDiff > 0 ? -25 : 25,
+      x: isActive ? 0 : isPrev ? -offset : isNext ? offset : adjustedDiff * offset,
+      scale: isActive ? 1 : isPrev || isNext ? 0.8 : 0.65,
+      rotateY: isActive ? 0 : isPrev ? 12 : isNext ? -12 : adjustedDiff > 0 ? -20 : 20,
       z: isActive ? 100 : isPrev || isNext ? 50 : 0,
-      opacity: isFar ? 0 : isActive ? 1 : 0.6,
-      filter: isActive ? 'blur(0px)' : 'blur(2px)',
+      opacity: isFar ? 0 : isActive ? 1 : 0.5,
+      filter: isActive ? 'blur(0px)' : 'blur(3px)',
     };
   };
 
@@ -127,7 +145,7 @@ const DrinksSection = () => {
   };
 
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-b from-background via-background to-muted/10">
+    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-background via-background to-muted/10">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Radial Glow */}
@@ -172,7 +190,7 @@ const DrinksSection = () => {
       </div>
 
       {/* Title Section */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 mb-16 md:mb-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 mb-10 md:mb-16">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -245,11 +263,11 @@ const DrinksSection = () => {
       {/* Card Carousel */}
       <div 
         ref={containerRef}
-        className="relative z-10 h-[500px] md:h-[600px] flex items-center justify-center"
-        style={{ perspective: '1200px' }}
+        className="relative z-10 h-[380px] sm:h-[420px] md:h-[480px] flex items-center justify-center px-4"
+        style={{ perspective: '1000px' }}
       >
         {/* Cards Container */}
-        <div className="relative w-full max-w-[280px] md:max-w-[340px] h-full">
+        <div className="relative w-full max-w-[220px] sm:max-w-[260px] md:max-w-[300px] h-full">
           <AnimatePresence mode="popLayout" custom={direction}>
             {drinks.map((drink, index) => {
               const style = getCardStyle(index);
@@ -324,7 +342,7 @@ const DrinksSection = () => {
 
                       {/* Number Badge */}
                       <motion.div
-                        className="absolute top-4 left-4 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border"
+                        className="absolute top-2 left-2 sm:top-3 sm:left-3 md:top-4 md:left-4 w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold border"
                         style={{ 
                           borderColor: `${drink.color}60`,
                           backgroundColor: `${drink.color}20`,
@@ -337,7 +355,7 @@ const DrinksSection = () => {
 
                       {/* Price Tag */}
                       <motion.div
-                        className="absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-semibold bg-background/80 backdrop-blur-sm border border-white/20"
+                        className="absolute top-2 right-2 sm:top-3 sm:right-3 md:top-4 md:right-4 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-semibold bg-background/80 backdrop-blur-sm border border-white/20"
                         initial={{ opacity: 0, x: 20 }}
                         animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
                         transition={{ delay: 0.2 }}
@@ -347,21 +365,21 @@ const DrinksSection = () => {
                     </div>
 
                     {/* Content */}
-                    <div className="p-6 h-[45%] flex flex-col">
+                    <div className="p-3 sm:p-4 md:p-5 h-[45%] flex flex-col">
                       {/* Category */}
                       <motion.span
-                        className="inline-flex items-center gap-1 text-[10px] tracking-widest uppercase mb-3"
+                        className="inline-flex items-center gap-1 text-[8px] sm:text-[9px] md:text-[10px] tracking-widest uppercase mb-2"
                         style={{ color: drink.color }}
                         initial={{ opacity: 0 }}
                         animate={isActive ? { opacity: 1 } : { opacity: 0.5 }}
                       >
-                        <span className="w-4 h-[1px]" style={{ backgroundColor: drink.color }} />
-                        Signature Cocktail
+                        <span className="w-3 h-[1px]" style={{ backgroundColor: drink.color }} />
+                        Signature
                       </motion.span>
 
                       {/* Title */}
                       <motion.h3 
-                        className="font-brand-serif text-2xl md:text-3xl tracking-wide text-foreground mb-2"
+                        className="font-brand-serif text-lg sm:text-xl md:text-2xl tracking-wide text-foreground mb-1 sm:mb-2"
                         animate={isActive ? { y: 0, opacity: 1 } : { y: 10, opacity: 0.7 }}
                       >
                         {drink.name}
@@ -369,7 +387,7 @@ const DrinksSection = () => {
                       
                       {/* Description */}
                       <motion.p 
-                        className="text-sm text-muted-foreground mb-4 line-clamp-2"
+                        className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mb-2 sm:mb-3 line-clamp-2"
                         animate={isActive ? { opacity: 1 } : { opacity: 0.5 }}
                       >
                         {drink.description}
@@ -377,29 +395,29 @@ const DrinksSection = () => {
 
                       {/* Ingredients */}
                       <motion.div 
-                        className="flex flex-wrap gap-1.5 mt-auto"
+                        className="flex flex-wrap gap-1 mt-auto"
                         initial={{ opacity: 0, y: 20 }}
                         animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                         transition={{ delay: 0.3 }}
                       >
-                        {drink.ingredients.slice(0, 3).map((ingredient, i) => (
+                        {drink.ingredients.slice(0, 2).map((ingredient, i) => (
                           <span
                             key={i}
-                            className="text-[10px] px-2 py-1 rounded-full bg-white/5 text-muted-foreground border border-white/10"
-                          >
+                            className="text-[8px] sm:text-[9px] md:text-[10px] px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full bg-white/5 text-muted-foreground border border-white/10"
+        >
                             {ingredient}
                           </span>
                         ))}
-                        {drink.ingredients.length > 3 && (
-                          <span className="text-[10px] px-2 py-1 text-muted-foreground">
-                            +{drink.ingredients.length - 3}
+                        {drink.ingredients.length > 2 && (
+                          <span className="text-[8px] sm:text-[9px] md:text-[10px] px-1.5 py-0.5 text-muted-foreground">
+                            +{drink.ingredients.length - 2}
                           </span>
                         )}
                       </motion.div>
                     </div>
 
                     {/* Bottom Glow Line */}
-                    <motion.div
+              <motion.div
                       className="absolute bottom-0 left-0 right-0 h-1"
                       animate={{
                         background: isActive 
@@ -418,20 +436,20 @@ const DrinksSection = () => {
         {/* Navigation Arrows */}
         <motion.button
           onClick={prevSlide}
-          className="absolute left-4 md:left-12 lg:left-24 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full bg-background/80 backdrop-blur-sm border border-white/10 flex items-center justify-center text-foreground hover:text-primary hover:border-primary/50 transition-all duration-300 group"
+          className="absolute left-2 sm:left-4 md:left-12 lg:left-24 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-background/80 backdrop-blur-sm border border-white/10 flex items-center justify-center text-foreground hover:text-primary hover:border-primary/50 transition-all duration-300 group"
           whileHover={{ scale: 1.1, x: -5 }}
           whileTap={{ scale: 0.95 }}
         >
-          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 group-hover:-translate-x-0.5 transition-transform" />
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:-translate-x-0.5 transition-transform" />
         </motion.button>
 
         <motion.button
           onClick={nextSlide}
-          className="absolute right-4 md:right-12 lg:right-24 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full bg-background/80 backdrop-blur-sm border border-white/10 flex items-center justify-center text-foreground hover:text-primary hover:border-primary/50 transition-all duration-300 group"
+          className="absolute right-2 sm:right-4 md:right-12 lg:right-24 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-background/80 backdrop-blur-sm border border-white/10 flex items-center justify-center text-foreground hover:text-primary hover:border-primary/50 transition-all duration-300 group"
           whileHover={{ scale: 1.1, x: 5 }}
           whileTap={{ scale: 0.95 }}
         >
-          <ChevronRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-0.5 transition-transform" />
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-0.5 transition-transform" />
         </motion.button>
       </div>
 
@@ -439,10 +457,10 @@ const DrinksSection = () => {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        className="relative z-10 flex flex-col items-center gap-6 mt-8 md:mt-12"
+        className="relative z-10 flex flex-col items-center gap-3 sm:gap-4 md:gap-6 mt-6 sm:mt-8 md:mt-12"
       >
         {/* Dots */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {drinks.map((drink, index) => (
             <motion.button
               key={index}
@@ -452,7 +470,7 @@ const DrinksSection = () => {
               whileTap={{ scale: 0.9 }}
             >
               <motion.div
-                className="w-3 h-3 rounded-full transition-all duration-500"
+                className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full transition-all duration-500"
                 animate={{
                   scale: activeIndex === index ? 1 : 0.7,
                   backgroundColor: activeIndex === index ? drink.color : 'rgba(255,255,255,0.2)',
@@ -474,7 +492,7 @@ const DrinksSection = () => {
         </div>
 
         {/* Progress Bar */}
-        <div className="w-48 md:w-64 h-1 bg-muted/20 rounded-full overflow-hidden">
+        <div className="w-32 sm:w-40 md:w-56 h-0.5 sm:h-1 bg-muted/20 rounded-full overflow-hidden">
           <motion.div
             className="h-full rounded-full"
             animate={{
@@ -486,12 +504,12 @@ const DrinksSection = () => {
         </div>
 
         {/* Drink Counter */}
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
           <motion.span 
             key={activeIndex}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-brand-serif text-2xl"
+            className="font-brand-serif text-lg sm:text-xl md:text-2xl"
             style={{ color: drinks[activeIndex].color }}
           >
             0{activeIndex + 1}
@@ -509,7 +527,7 @@ const DrinksSection = () => {
             exit={{ opacity: 0, y: -10 }}
             className="text-center"
           >
-            <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">
+            <span className="text-[10px] sm:text-xs tracking-[0.2em] sm:tracking-[0.3em] uppercase text-muted-foreground">
               {drinks[activeIndex].name}
             </span>
           </motion.div>
