@@ -79,7 +79,7 @@ const DrinksSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className="relative h-[250vh] noise-overlay"
+      className="relative h-[250vh] noise-overlay top-32"
       onMouseMove={handleMouseMove}
     >
       {/* Animated Background Gradient */}
