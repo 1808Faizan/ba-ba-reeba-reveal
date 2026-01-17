@@ -12,15 +12,13 @@ const Header = () => {
   const [hoverLogo, setHoverLogo] = useState(false);
   const [reservationOpen, setReservationOpen] = useState(false);
 
- const navItems = [
-  { name: "Home", href: "/", isRoute: true },
-  { name: "Menu", href: "/menu", isRoute: true },
-  { name: "Reservation", href: "#", isRoute: false, isReservation: true },
-  { name: "Gallery", href: "/gallery", isRoute: true },
-  { name: "Career", href: "/career", isRoute: true }, // 👈 added
-  { name: "Contact", href: "/contact", isRoute: true },
-];
-
+  const navItems = [
+    { name: "Home", href: "/", isRoute: true },
+    { name: "Menu", href: "/menu", isRoute: true },
+    { name: "Reservation", href: "#", isRoute: false, isReservation: true },
+    { name: "Gallery", href: "/gallery", isRoute: true },
+    { name: "Contact", href: "/contact", isRoute: true },
+  ];
 
   const handleClose = () => setOpen(false);
 
