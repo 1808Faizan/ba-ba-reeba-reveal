@@ -146,7 +146,7 @@ const MenuPage = () => {
               <img
                 src={menuPages[currentPage].src}
                 alt={menuPages[currentPage].label}
-                className="max-h-[75vh] max-w-[90vw] object-contain"
+                className="max-h-[80vh] w-[95vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] object-contain"
               />
             </div>
           </motion.div>

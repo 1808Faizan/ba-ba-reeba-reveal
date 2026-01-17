@@ -22,6 +22,7 @@ const FooterSection = () => {
     { name: 'Home', path: '/' },
     { name: 'Menu', path: '/menu' },
     { name: 'Gallery', path: '/gallery' },
+    { name: 'Career', path: '/contact' },
     { name: 'Contact', path: '/contact' },
   ];
 

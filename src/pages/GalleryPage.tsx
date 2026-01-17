@@ -53,10 +53,10 @@ const GalleryPage = () => {
         </motion.div>
       </section>
 
-      {/* Gallery Grid */}
-      <section className="py-12 px-6 md:px-12">
+      {/* Gallery Grid - Masonry style */}
+      <section className="py-12 px-4 md:px-8 lg:px-12">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="columns-2 md:columns-3 lg:columns-4 gap-3 md:gap-4">
             {images.map((image, index) => (
               <motion.div
                 key={index}
@@ -66,14 +66,12 @@ const GalleryPage = () => {
                 transition={{ duration: 0.5, delay: index * 0.05 }}
                 whileHover={{ scale: 1.02, zIndex: 10 }}
                 onClick={() => setSelectedImage(image.src)}
-                className={`relative overflow-hidden cursor-pointer group ${
-                  index % 5 === 0 ? 'row-span-2' : ''
-                }`}
+                className="relative overflow-hidden cursor-pointer group mb-3 md:mb-4 break-inside-avoid"
               >
                 <img
                   src={image.src}
                   alt={image.alt}
-                  className="w-full h-full object-cover aspect-square transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-background/0 group-hover:bg-background/30 transition-colors duration-300" />
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
