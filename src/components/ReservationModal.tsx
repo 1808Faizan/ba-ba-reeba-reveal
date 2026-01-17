@@ -81,13 +81,13 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-[#F5D6A8] text-[#1a1a1a] rounded-lg shadow-2xl"
+            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-[#2596be] text-white rounded-lg shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 p-1 text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors z-10"
+              className="absolute top-4 right-4 p-1 text-white/70 hover:text-white transition-colors z-10"
             >
               <X size={24} />
             </button>
@@ -113,7 +113,7 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                       <select
                         value={formData.restaurant}
                         onChange={(e) => setFormData({ ...formData, restaurant: e.target.value })}
-                        className="w-full p-4 bg-[#FFF8EC] border-none rounded-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#1a1a1a]/20"
+                        className="w-full p-4 bg-white/20 border-none rounded-sm text-white focus:outline-none focus:ring-2 focus:ring-white/30 [&>option]:text-[#1a1a1a] [&>option]:bg-white"
                       >
                         <option value="">Select Restaurant</option>
                         {restaurants.map((r) => (
@@ -131,7 +131,7 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                         <select
                           value={formData.guests}
                           onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
-                          className="w-full p-4 bg-[#FFF8EC] border-none rounded-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#1a1a1a]/20"
+                          className="w-full p-4 bg-white/20 border-none rounded-sm text-white focus:outline-none focus:ring-2 focus:ring-white/30 [&>option]:text-[#1a1a1a] [&>option]:bg-white"
                         >
                           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
                             <option key={n} value={n}>{n}</option>
@@ -142,11 +142,11 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                         <label className="block text-sm font-medium mb-2">Date</label>
                         <Popover>
                           <PopoverTrigger asChild>
-                            <button className="w-full p-4 bg-[#FFF8EC] border-none rounded-sm text-[#1a1a1a] text-left focus:outline-none focus:ring-2 focus:ring-[#1a1a1a]/20">
+                            <button className="w-full p-4 bg-white/20 border-none rounded-sm text-white text-left focus:outline-none focus:ring-2 focus:ring-white/30">
                               {format(formData.date, "dd-MMM-yyyy")}
                             </button>
                           </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0 bg-[#FFF8EC]" align="start">
+                          <PopoverContent className="w-auto p-0 bg-white" align="start">
                             <Calendar
                               mode="single"
                               selected={formData.date}
@@ -161,7 +161,7 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                     </div>
 
                     {!formData.restaurant && (
-                      <p className="text-center text-[#1a1a1a]/60 mb-6">
+                      <p className="text-center text-white/70 mb-6">
                         Please select a restaurant to see available time slots
                       </p>
                     )}
@@ -170,7 +170,7 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                     <button
                       onClick={handleNext}
                       disabled={!formData.restaurant}
-                      className="flex items-center justify-center gap-2 mx-auto text-lg font-medium text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="flex items-center justify-center gap-2 mx-auto text-lg font-medium text-white/80 hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       Continue <ArrowRight size={20} />
                     </button>
@@ -190,19 +190,19 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                     </h2>
 
                     {/* Restaurant Display */}
-                    <div className="w-full p-4 bg-[#FFF8EC] rounded-sm mb-4">
-                      <span className="font-semibold">{getRestaurantDisplay()}</span>
+                    <div className="w-full p-4 bg-white/20 rounded-sm mb-4">
+                      <span className="font-semibold text-white">{getRestaurantDisplay()}</span>
                     </div>
 
                     {/* Guests & Date Display */}
                     <div className="grid grid-cols-2 gap-4 mb-6">
-                      <div className="p-4 bg-[#FFF8EC] rounded-sm">
-                        <span className="text-sm text-[#1a1a1a]/60 block mb-1">Guests</span>
-                        <span>{formData.guests}</span>
+                      <div className="p-4 bg-white/20 rounded-sm">
+                        <span className="text-sm text-white/70 block mb-1">Guests</span>
+                        <span className="text-white">{formData.guests}</span>
                       </div>
-                      <div className="p-4 bg-[#FFF8EC] rounded-sm">
-                        <span className="text-sm text-[#1a1a1a]/60 block mb-1">Date</span>
-                        <span>{format(formData.date, "dd-MMM-yyyy")}</span>
+                      <div className="p-4 bg-white/20 rounded-sm">
+                        <span className="text-sm text-white/70 block mb-1">Date</span>
+                        <span className="text-white">{format(formData.date, "dd-MMM-yyyy")}</span>
                       </div>
                     </div>
 
@@ -216,8 +216,8 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                           className={cn(
                             "p-3 border-2 rounded-sm text-sm font-medium transition-all",
                             formData.timeSlot === slot
-                              ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
-                              : "bg-[#FFF8EC] border-[#E8D5B8] text-[#1a1a1a] hover:border-[#1a1a1a]"
+                              ? "bg-white text-[#2596be] border-white"
+                              : "bg-white/20 border-white/30 text-white hover:border-white"
                           )}
                         >
                           {slot}
@@ -233,11 +233,11 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                           className={cn(
                             "w-5 h-5 border-2 rounded flex items-center justify-center flex-shrink-0 mt-0.5 transition-colors",
                             formData.termsAccepted
-                              ? "bg-[#1a1a1a] border-[#1a1a1a]"
-                              : "bg-[#FFF8EC] border-[#1a1a1a]/30"
+                              ? "bg-white border-white"
+                              : "bg-white/20 border-white/50"
                           )}
                         >
-                          {formData.termsAccepted && <Check size={14} className="text-white" />}
+                          {formData.termsAccepted && <Check size={14} className="text-[#2596be]" />}
                         </div>
                         <div>
                           <span className="font-semibold">Restaurant Terms & Conditions</span>
@@ -245,7 +245,7 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                         </div>
                       </label>
                       {formData.termsAccepted && (
-                        <ul className="mt-3 ml-8 text-sm text-[#1a1a1a]/80 space-y-1 list-disc">
+                        <ul className="mt-3 ml-8 text-sm text-white/80 space-y-1 list-disc">
                           <li><strong>Dress Code:</strong> Smart Casual. Men, please note regrettably no open sandals/shoes.</li>
                           <li><strong>Cover Charges:</strong> Deposit/Cover Charge is not required for children below 15 years.</li>
                           <li><strong>Kids Policy:</strong> Thursday, Friday & Saturday Post 11:00 PM Guests below 21 Years not allowed.</li>
@@ -257,14 +257,14 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                     <div className="flex items-center justify-between">
                       <button
                         onClick={handleBack}
-                        className="flex items-center gap-2 text-lg font-medium text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors"
+                        className="flex items-center gap-2 text-lg font-medium text-white/80 hover:text-white transition-colors"
                       >
                         <ArrowLeft size={20} /> Back
                       </button>
                       <button
                         onClick={handleNext}
                         disabled={!formData.timeSlot || !formData.termsAccepted}
-                        className="flex items-center gap-2 text-lg font-medium text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="flex items-center gap-2 text-lg font-medium text-white/80 hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         Continue <ArrowRight size={20} />
                       </button>
@@ -283,13 +283,13 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                     <h2 className="text-2xl md:text-3xl font-display tracking-wide mb-2">
                       Reservation Details
                     </h2>
-                    <p className="text-[#1a1a1a]/70 mb-6">
+                    <p className="text-white/80 mb-6">
                       {getRestaurantDisplay()},<br />
                       {format(formData.date, "EEEE, MMMM d")}, at {formData.timeSlot}<br />
                       Table for {formData.guests}
                     </p>
 
-                    <div className="h-px bg-[#1a1a1a]/20 mb-6" />
+                    <div className="h-px bg-white/30 mb-6" />
 
                     <h3 className="text-xl font-display tracking-wide mb-4">Personal details</h3>
 
@@ -301,7 +301,7 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                           type="text"
                           value={formData.firstName}
                           onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                          className="w-full p-3 bg-[#FFF8EC] border-none rounded-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#1a1a1a]/20"
+                          className="w-full p-3 bg-white/20 border-none rounded-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30"
                         />
                       </div>
                       <div>
@@ -310,7 +310,7 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                           type="text"
                           value={formData.lastName}
                           onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                          className="w-full p-3 bg-[#FFF8EC] border-none rounded-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#1a1a1a]/20"
+                          className="w-full p-3 bg-white/20 border-none rounded-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30"
                         />
                       </div>
                     </div>
@@ -323,7 +323,7 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                           type="email"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full p-3 bg-[#FFF8EC] border-none rounded-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#1a1a1a]/20"
+                          className="w-full p-3 bg-white/20 border-none rounded-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30"
                         />
                       </div>
                       <div>
@@ -332,7 +332,7 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                           type="tel"
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="w-full p-3 bg-[#FFF8EC] border-none rounded-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#1a1a1a]/20"
+                          className="w-full p-3 bg-white/20 border-none rounded-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30"
                         />
                       </div>
                     </div>
@@ -344,7 +344,7 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                         <select
                           value={formData.ageRange}
                           onChange={(e) => setFormData({ ...formData, ageRange: e.target.value })}
-                          className="w-full p-3 bg-[#FFF8EC] border-none rounded-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#1a1a1a]/20"
+                          className="w-full p-3 bg-white/20 border-none rounded-sm text-white focus:outline-none focus:ring-2 focus:ring-white/30 [&>option]:text-[#1a1a1a] [&>option]:bg-white"
                         >
                           <option value="">Select Age Range</option>
                           {ageRanges.map((age) => (
@@ -358,7 +358,7 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                           type="text"
                           value={formData.pincode}
                           onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                          className="w-full p-3 bg-[#FFF8EC] border-none rounded-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#1a1a1a]/20"
+                          className="w-full p-3 bg-white/20 border-none rounded-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30"
                         />
                       </div>
                     </div>
@@ -372,9 +372,9 @@ const ReservationModal = ({ isOpen, onClose }: ReservationModalProps) => {
                         value={formData.specialRequests}
                         onChange={(e) => setFormData({ ...formData, specialRequests: e.target.value.slice(0, 200) })}
                         rows={3}
-                        className="w-full p-3 bg-[#FFF8EC] border-none rounded-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#1a1a1a]/20 resize-none"
+                        className="w-full p-3 bg-white/20 border-none rounded-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 resize-none"
                       />
-                      <p className="text-right text-sm text-[#1a1a1a]/60 mt-1">
+                      <p className="text-right text-sm text-white/60 mt-1">
                         {formData.specialRequests.length}/200 characters
                       </p>
                     </div>
