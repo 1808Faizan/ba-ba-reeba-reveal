@@ -1,4 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700;800;900&family=Antic+Didone&display=swap');
+
+@font-face {
+  font-family: 'Antipoda';
+  src: local('Antic Didone'), local('AnticDidone-Regular');
+  font-weight: 400;
+  font-style: normal;
+}
 
 @tailwind base;
 @tailwind components;
@@ -85,6 +92,11 @@ html, body, #root {
 }
 
 @layer components {
+  /* Antipoda font for legal pages */
+  .font-antipoda {
+    font-family: 'Antic Didone', 'Playfair Display', serif;
+  }
+
   /* Display typography - Bebas Neue */
   .font-display {
     font-family: 'Bebas Neue', sans-serif;

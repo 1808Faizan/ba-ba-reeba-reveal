@@ -7,12 +7,12 @@ const PrivacyPage = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="pt-32 pb-20 px-6 md:px-12">
+      <main className="pt-32 pb-20 px-6 md:px-12 font-antipoda">
         <div className="max-w-4xl mx-auto">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-brand-serif text-4xl md:text-6xl text-foreground mb-6 tracking-wider"
+            className="font-antipoda text-4xl md:text-6xl text-foreground mb-6 tracking-wider"
           >
             Privacy Policy
           </motion.h1>
@@ -21,7 +21,7 @@ const PrivacyPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-muted-foreground mb-12 text-lg"
+            className="font-antipoda text-muted-foreground mb-12 text-lg"
           >
             This Privacy Policy explains how Ba Ba Reeba handles the personal data we collect from our guests.
           </motion.p>
@@ -30,10 +30,10 @@ const PrivacyPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="prose prose-lg prose-invert max-w-none space-y-10 text-muted-foreground"
+            className="prose prose-lg prose-invert max-w-none space-y-10 text-muted-foreground font-antipoda"
           >
             <section>
-              <h2 className="font-brand-serif text-2xl text-foreground mb-4">Information Collection</h2>
+              <h2 className="font-antipoda text-2xl text-foreground mb-4">Information Collection</h2>
               <p>
                 We collect personal information that you voluntarily provide to us when making reservations, 
                 signing up for our loyalty programs, or contacting us through our website. This information 
@@ -49,7 +49,7 @@ const PrivacyPage = () => {
             </section>
 
             <section>
-              <h2 className="font-brand-serif text-2xl text-foreground mb-4">Use of Data</h2>
+              <h2 className="font-antipoda text-2xl text-foreground mb-4">Use of Data</h2>
               <p>
                 The personal data we collect is used for the following purposes:
               </p>
@@ -68,7 +68,7 @@ const PrivacyPage = () => {
             </section>
 
             <section>
-              <h2 className="font-brand-serif text-2xl text-foreground mb-4">CCTV Surveillance</h2>
+              <h2 className="font-antipoda text-2xl text-foreground mb-4">CCTV Surveillance</h2>
               <p>
                 For the safety and security of our guests and staff, our premises are under <strong className="text-foreground">24/7 CCTV 
                 surveillance</strong>. By entering Ba Ba Reeba, you acknowledge and consent to being recorded 
@@ -83,7 +83,7 @@ const PrivacyPage = () => {
             </section>
 
             <section>
-              <h2 className="font-brand-serif text-2xl text-foreground mb-4">Third-Party Sharing</h2>
+              <h2 className="font-antipoda text-2xl text-foreground mb-4">Third-Party Sharing</h2>
               <p>
                 Ba Ba Reeba is committed to protecting your privacy. <strong className="text-foreground">We do not sell, trade, or 
                 otherwise transfer your personal data to third parties</strong> for their marketing purposes. 
@@ -97,7 +97,7 @@ const PrivacyPage = () => {
             </section>
 
             <section>
-              <h2 className="font-brand-serif text-2xl text-foreground mb-4">Photography & Media</h2>
+              <h2 className="font-antipoda text-2xl text-foreground mb-4">Photography & Media</h2>
               <p>
                 By entering Ba Ba Reeba, you acknowledge and consent that:
               </p>
@@ -114,7 +114,7 @@ const PrivacyPage = () => {
             </section>
 
             <section>
-              <h2 className="font-brand-serif text-2xl text-foreground mb-4">Data Security</h2>
+              <h2 className="font-antipoda text-2xl text-foreground mb-4">Data Security</h2>
               <p>
                 We implement appropriate technical and organizational security measures to protect your 
                 personal information against unauthorized access, alteration, disclosure, or destruction. 
@@ -124,7 +124,7 @@ const PrivacyPage = () => {
             </section>
 
             <section>
-              <h2 className="font-brand-serif text-2xl text-foreground mb-4">Your Rights</h2>
+              <h2 className="font-antipoda text-2xl text-foreground mb-4">Your Rights</h2>
               <p>
                 You have the right to:
               </p>
@@ -137,7 +137,7 @@ const PrivacyPage = () => {
             </section>
 
             <section>
-              <h2 className="font-brand-serif text-2xl text-foreground mb-4">Contact Us</h2>
+              <h2 className="font-antipoda text-2xl text-foreground mb-4">Contact Us</h2>
               <p>
                 If you have any questions about this Privacy Policy or wish to exercise your rights, 
                 please contact us at:
